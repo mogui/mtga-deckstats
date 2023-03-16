@@ -1,0 +1,43 @@
+- name: Run containers
+  hosts: melee
+  tasks:
+    - name: Git checkout
+      ansible.builtin.git:
+        repo: 'https://github.com/mogui/mtga-deckstats.git'
+        dest: /home/{{ ansible_user }}/mtga-deckstats
+        version: main
+    - name: Build Container
+      containers.podman.podman_image:
+        name: mtga-deckstats
+        path: /home/{{ ansible_user }}/mtga-deckstats
+        state: build
+        tag: latest
+        build:
+          format: oci
+        force: yes
+    - name: Run container
+      containers.podman.podman_container:
+        name: mtga-deckstats
+        image: localhost/mtga-deckstats:latest
+        image_strict: true
+        state: started
+        recreate: true
+        env: 
+          PORT: "8081"
+        ports:
+          - "127.0.0.1:8081:8081"
+    - name: Configure domain
+      vars:
+        domain: mtgdeck.apps.mogui.it
+        port: 8081
+      template:
+        src: domain.conf.j2
+        dest: /home/{{ ansible_user }}/sites/{{ domain }}.conf
+      notify: restart nginx
+  handlers:
+    - name: restart nginx
+      become: True
+      service:
+        name: nginx
+        state: restarted
+        
