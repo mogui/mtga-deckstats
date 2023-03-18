@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="columns">
+    <div class="column is-one-third">
+      <form method="post">
+        <div class="field">
+          <label class="label">Insert deck text</label>
+          <div class="control">
+            <textarea class="textarea" rows="20" placeholder="Deck" id="deck" name="deck">{{ request.form['deck'] }}</textarea>
+          </div>
+        </div>
+        <div class="control">
+          <input type="submit" class="button is-primary" value="Get">
+        </div>
+      </form>
+    </div>
+    <div class="column">
+      {% if data['stats'] %}
+      <table class="table is-striped is-bordered">
+        <tr>
+          {% for head in data['stats']['heading'] %}
+            <th>{{ head }}</th>
+          {% endfor %}    
+        </tr>
+        {% for row in data['stats']['rows'] %}
+        <tr>
+          {% for column in row %}
+          <td>{{column}}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+
+      </table>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
