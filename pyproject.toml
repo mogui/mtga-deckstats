@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "mtgdeckstats"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.9"
 flask = "^2.2.3"
 gunicorn = "^20.1.0"
 mtgtools = "^0.9"
