@@ -67,10 +67,10 @@ def search_cached(deck_str):
   return deck
     
 def get_stats(deck_str):
-  deck = search_cached(deck_str)
-  # mtg_db:MtgDB = get_mtgdb()
-  # cards:PCardList = mtg_db.root.scryfall_cards
-  # deck = cards.from_str(deck_str)
+  # deck = search_cached(deck_str)
+  mtg_db:MtgDB = get_mtgdb()
+  cards:PCardList = mtg_db.root.scryfall_cards
+  deck = cards.from_str(deck_str)
   no_land_deck = [card for card in deck if card.cmc > 0]
   lands = [card for card in deck if card.cmc == 0]
   
