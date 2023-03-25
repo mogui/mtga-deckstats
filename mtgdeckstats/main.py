@@ -1,4 +1,3 @@
-import json
 from .stats import convert_deck, get_stats
 
 from flask import (
@@ -19,9 +18,7 @@ def main():
             error = 'Insert exported deck.'
 
         if error is None:
-            conv = convert_deck(deck_str)
-            stats = get_stats(conv)
-            data['converted_deck'] = conv
+            stats = get_stats(deck_str)
             data['stats'] = stats
         else:
             flash(error)
