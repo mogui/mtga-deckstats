@@ -155,7 +155,7 @@ def get_stats(deck_str):
   rows.append(["colored", ""] + [pure_colors_count[c] for c in colors])    
   rows.append(["color identity", ""] + [colors_count[c] for c in colors])    
   rows.append(["colors %", ""] + ["%.2f%%" % (colors_count[c]/card_count*100) for c in colors])    
-  rows.append(["needed lands", len(lands)] + ["-"] * len(colors))    
+  # rows.append(["needed lands", len(lands)] + ["-"] * len(colors))    
   rows.append(["needed sources", ""] + [needs[c] for c in colors])    
   rows.append(["color sources", ""] + [mana_sources[c] for c in colors if mana_sources.get(c)])
   return {
