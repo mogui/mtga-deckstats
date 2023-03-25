@@ -15,17 +15,10 @@
         build:
           format: oci
         force: yes
-    - name: Create Prometheus data dir
-      ansible.builtin.file:
-        path: /home/{{ ansible_user }}/data/mtga
-        state: directory
-        mode: '0755'
     - name: Run container
       containers.podman.podman_container:
         name: mtga-deckstats
         image: localhost/mtga-deckstats:latest
-        volume:
-          - /home/{{ ansible_user }}/data/mtga:/app/db
         image_strict: true
         state: started
         recreate: true
