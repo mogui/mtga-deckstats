@@ -65,7 +65,8 @@ def convert_deck(deck_raw:str):
       
       # resolve card
       scry_card = repo.get_card(m.group("set"), m.group("cn"))
-      
+      if scry_card is None:
+        continue
       card = {k: v for k,v in scry_card.items() if k in mapped_keys}
       card['sideboard'] = sideboard
       for _ in range(0, int(m.group("qt"))):
