@@ -13,6 +13,7 @@ COST_MATRIX = {"5C": [7,9,10],
 "1C": [11,13,14],
 "4CC": [11,13,16],
 "6CC": [10,12,15],
+"6C": [10,12,15],
 "C": [12,14,15],
 "3CC": [12,15,17],
 "4CCC": [12,16,19],
@@ -49,6 +50,7 @@ def convert_deck(deck_raw:str):
     'cmc', 
     'type_line', 
     'color_identity', 
+    'produced_mana',
     'colors',
     'set_name', 
     'name',
@@ -108,7 +110,7 @@ def get_stats(deck_str):
   multicolor_count = 0
   mana_sources = {}
   for land in lands:
-    for c in land.color_identity:      
+    for c in land.produced_mana:      
       if mana_sources.get(c) is None:
         mana_sources[c] = 0
       mana_sources[c] += 1
@@ -154,7 +156,7 @@ def get_stats(deck_str):
   rows.append(["avg mana cost", "%.2f" % (all_costs/card_count)] + ["-"] * len(colors))    
   rows.append(["multicolor", multicolor_count] + ["-"] * len(colors))
   rows.append(["colorless", colorless_count] + ["-"] * len(colors))    
-  rows.append(["colored", ""] + [pure_colors_count[c] for c in colors])    
+  rows.append(["colored", ""] + [pure_colors_count.get(c, 0) for c in colors])    
   rows.append(["color identity", ""] + [colors_count[c] for c in colors])    
   rows.append(["colors %", ""] + ["%.2f%%" % (colors_count[c]/card_count*100) for c in colors])    
   # rows.append(["needed lands", len(lands)] + ["-"] * len(colors))    
