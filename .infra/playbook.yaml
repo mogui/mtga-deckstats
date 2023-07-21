@@ -15,17 +15,41 @@
         build:
           format: oci
         force: yes
-    - name: Run container
+      
+    - name: Create container
       containers.podman.podman_container:
-        name: mtga-deckstats
+        name: mtgadecks
         image: localhost/mtga-deckstats:latest
-        image_strict: true
-        state: started
-        recreate: true
+        # image_strict: true
+        rm: true
+        state: created
         env: 
           PORT: "8081"
         ports:
           - "127.0.0.1:8081:8081"
+      
+    - name: Generate systemd unit file for  container
+      containers.podman.podman_generate_systemd:
+        name: mtgadecks
+        new: true
+        dest: ~/.config/systemd/user
+      
+    # - name: Create systemd script for created container
+    #   become: true
+    #   shell: podman generate systemd --new --name nginx > /etc/systemd/system/nginx.service
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        remote_src: yes
+        src: /home/lechuck/.config/systemd/user/container-mtgadecks.service
+        dest: /etc/systemd/system/container-mtgadecks.service
+      become: true
+    - name: Ensure container is started and enabled
+      ansible.builtin.systemd:
+        name: container-mtgadecks
+        daemon_reload: true
+        state: started
+        enabled: true
+      become: true
     - name: Configure domain
       vars:
         domain: mtgdeck.apps.mogui.it
